@@ -1,36 +1,69 @@
 import { Config } from '../interfaces/config.interface';
-import fs from 'fs';
-import { WEEKDAYS } from '../constants/weekdays.js';
-import { NUMBER_OF_WEEKS } from '../constants/number-of-week.js';
 import { Booking } from '../interfaces/booking.interface';
 
-export function createBooking(): Booking {
-    const config: Config = JSON.parse(fs.readFileSync("config.json").toString());
+export function createBooking(config: Config): Booking {
+    const booking: Booking = {};
 
-    let occupiedWorkstations: boolean[][] = new Array(WEEKDAYS.length);
-    for (let i = 0; i < occupiedWorkstations.length; i++) {
-        occupiedWorkstations[i] = new Array(config.numberOfWorkstations).fill(false);
-    }
+    for (let week = 0; week < config.weeksNumber; week++) {
+        booking[`Week${week + 1}`] = {};
+        for (const weekday of config.weekDays) {
+            booking[`Week${week + 1}`][weekday] = {};
 
-    let booking: Booking = {};
-    for (let weekIndex = 0; weekIndex < NUMBER_OF_WEEKS; weekIndex++) {
-        let week = `Week ${weekIndex + 1}`;
-        booking[week] = {};
-        for (let weekdayIndex = 0; weekdayIndex < WEEKDAYS.length; weekdayIndex++) {
-            let weekday = WEEKDAYS[weekdayIndex];
-            booking[week][weekday] = {};
-            for (let i = 0; i < config.workers.length; i++) {
-                let worker = config.workers[i].name;
-                if (config.workers[i].smartWorking.includes(weekday)) {
-                    booking[week][weekday][worker] = "Smart Working";
+            // Sort workers by priority (workers with assigned workstation first)
+            const workers = config.workers.sort((a, b) => {
+                if (!a.workstationId && b.workstationId) return 1;
+                if (a.workstationId && !b.workstationId) return -1;
+                return 0;
+            });
+
+            // Assign workstations to workers with assigned workstations
+            for (const worker of workers) {
+                if (!worker.workstationId) break;
+
+                if (config.weekDays.indexOf(worker.preferredSmartDays[0]) !== config.weekDays.indexOf(weekday)) {
+                    booking[`Week${week + 1}`][weekday][worker.name] = worker.workstationId;
                 } else {
-                    let preferredWorkstations = config.workers[i].workstations.filter((p) => !occupiedWorkstations[weekdayIndex][p - 1]);
-                    let workstationIndex = preferredWorkstations.length > 0 ? preferredWorkstations[0] - 1 : occupiedWorkstations[weekdayIndex].findIndex((p) => !p);
-                    occupiedWorkstations[weekdayIndex][workstationIndex] = true;
-                    booking[week][weekday][worker] = `Workstation ${workstationIndex + 1}`;
+                    const smartDayCount = Object.values(booking[`Week${week + 1}`]).reduce((count, day) => {
+                        return count + (day[worker.name] ? 1 : 0);
+                    }, 0);
+
+                    if (smartDayCount < config.maxSmartDays) {
+                        booking[`Week${week + 1}`][weekday][worker.name] = 'Smart Working';
+                    } else {
+                        booking[`Week${week + 1}`][weekday][worker.name] = worker.workstationId;
+                    }
+                }
+            }
+
+            // Assign workstations to workers without assigned workstations
+            const availableWorkstations = [...config.workstationsId];
+            for (const worker of workers) {
+                if (worker.workstationId) continue;
+
+                if (config.weekDays.indexOf(worker.preferredSmartDays[0]) !== config.weekDays.indexOf(weekday)) {
+                    if (availableWorkstations.length) {
+                        booking[`Week${week + 1}`][weekday][worker.name] = availableWorkstations.shift();
+                    } else {
+                        booking[`Week${week + 1}`][weekday][worker.name] = 'Workstation not available';
+                    }
+                } else {
+                    const smartDayCount = Object.values(booking[`Week${week + 1}`]).reduce((count, day) => {
+                        return count + (day[worker.name] ? 1 : 0);
+                    }, 0);
+
+                    if (smartDayCount < config.maxSmartDays) {
+                        booking[`Week${week + 1}`][weekday][worker.name] = 'Smart Working';
+                    } else {
+                        if (availableWorkstations.length) {
+                            booking[`Week${week + 1}`][weekday][worker.name] = availableWorkstations.shift();
+                        } else {
+                            booking[`Week${week + 1}`][weekday][worker.name] = 'Workstation not available';
+                        }
+                    }
                 }
             }
         }
     }
+
     return booking;
 }

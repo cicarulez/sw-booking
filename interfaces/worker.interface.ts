@@ -1,5 +1,5 @@
 export interface Worker {
     name: string;
-    smartWorking: string[];
-    workstations: number[];
+    preferredSmartDays: string[];
+    workstationId?: string;
 }

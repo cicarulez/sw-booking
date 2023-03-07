@@ -1,5 +1,5 @@
 export interface Booking {
-    [day: string]: {
+    [week: string]: {
         [weekday: string]: {
             [worker: string]: string;
         }

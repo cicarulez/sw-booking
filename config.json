@@ -1,10 +1,24 @@
 {
-  "numberOfWorkstations": 10,
+  "maxSmartDays": 2,
+  "weekDays": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+  "weeksNumber": 4,
+  "workstationsId": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
   "workers": [
-    { "name": "Worker 1", "smartWorking": ["Monday", "Friday"], "workstations": [2, 3, 4] },
-    { "name": "Worker 2", "smartWorking": ["Tuesday", "Wednesday"], "workstations": [1, 5, 6] },
-    { "name": "Worker 3", "smartWorking": ["Monday", "Tuesday"], "workstations": [7, 8, 9] },
-    { "name": "Worker 4", "smartWorking": ["Wednesday", "Thursday"], "workstations": [1, 2, 3] },
-    { "name": "Worker 5", "smartWorking": ["Thursday", "Friday"], "workstations": [4, 5, 6] }
+    { "name": "John Doe", "preferredSmartDays": ["Wednesday", "Friday"], "workstationId": "1" },
+    { "name": "Jane Doe", "preferredSmartDays": ["Wednesday", "Friday"], "workstationId": "2" },
+    { "name": "Tom Smith", "preferredSmartDays": ["Wednesday", "Thursday"], "workstationId": "3" },
+    { "name": "Emily Brown", "preferredSmartDays": ["Monday", "Tuesday"], "workstationId": "4" },
+    { "name": "Sarah Johnson", "preferredSmartDays": ["Wednesday", "Thursday"], "workstationId": "5" },
+    { "name": "Michael Davis", "preferredSmartDays": ["Thursday", "Friday"], "workstationId": "7" },
+    { "name": "Emily Lee", "preferredSmartDays": ["Thursday", "Friday"], "workstationId": "8" },
+    { "name": "David Wilson", "preferredSmartDays": ["Monday", "Friday"] },
+    { "name": "Jessica White", "preferredSmartDays": ["Tuesday", "Wednesday"] },
+    { "name": "James Anderson", "preferredSmartDays": ["Monday", "Tuesday"] },
+    { "name": "Emily Thompson", "preferredSmartDays": ["Wednesday", "Thursday"] },
+    { "name": "William Clark", "preferredSmartDays": ["Thursday", "Friday"] },
+    { "name": "Jane Martinez", "preferredSmartDays": ["Thursday", "Friday"], "workstationId": "9" },
+    { "name": "Michael Lee", "preferredSmartDays": ["Thursday", "Friday"], "workstationId": "10" },
+    { "name": "Emily Nelson", "preferredSmartDays": ["Thursday", "Friday"] },
+    { "name": "William Scott", "preferredSmartDays": ["Thursday", "Friday"] }
   ]
 }
