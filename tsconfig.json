@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "module": "es2022",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "target": "es2022",
+    "strict": false,
+    "typeRoots": ["node_modules/@types"],
+    "esModuleInterop": true,
+    "moduleResolution": "Node"
+  }
+}

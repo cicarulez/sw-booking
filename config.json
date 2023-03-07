@@ -1,0 +1,10 @@
+{
+  "numberOfWorkstations": 10,
+  "workers": [
+    { "name": "Worker 1", "smartWorking": ["Monday", "Friday"], "workstations": [2, 3, 4] },
+    { "name": "Worker 2", "smartWorking": ["Tuesday", "Wednesday"], "workstations": [1, 5, 6] },
+    { "name": "Worker 3", "smartWorking": ["Monday", "Tuesday"], "workstations": [7, 8, 9] },
+    { "name": "Worker 4", "smartWorking": ["Wednesday", "Thursday"], "workstations": [1, 2, 3] },
+    { "name": "Worker 5", "smartWorking": ["Thursday", "Friday"], "workstations": [4, 5, 6] }
+  ]
+}
