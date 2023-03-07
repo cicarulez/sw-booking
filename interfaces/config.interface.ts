@@ -6,4 +6,9 @@ export interface Config {
     weekDays: string[];
     workstationsId: string[];
     workers: Worker[];
+    labels: {
+        notAvailable: string;
+        workstation: string;
+        offsiteDay: string;
+    }
 }

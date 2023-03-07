@@ -4,14 +4,14 @@
   "weeksNumber": 4,
   "workstationsId": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
   "workers": [
-    { "name": "John Doe", "preferredSmartDays": ["Wednesday", "Friday"], "workstationId": "1" },
-    { "name": "Jane Doe", "preferredSmartDays": ["Wednesday", "Friday"], "workstationId": "2" },
+    { "name": "John Doe", "preferredSmartDays": ["Wednesday", "Friday"], "workstationId": "1", "lockedSw": true },
+    { "name": "Jane Doe", "preferredSmartDays": ["Wednesday", "Friday"], "workstationId": "2", "lockedSw": true },
     { "name": "Tom Smith", "preferredSmartDays": ["Wednesday", "Thursday"], "workstationId": "3" },
     { "name": "Emily Brown", "preferredSmartDays": ["Monday", "Tuesday"], "workstationId": "4" },
     { "name": "Sarah Johnson", "preferredSmartDays": ["Wednesday", "Thursday"], "workstationId": "5" },
     { "name": "Michael Davis", "preferredSmartDays": ["Thursday", "Friday"], "workstationId": "7" },
     { "name": "Emily Lee", "preferredSmartDays": ["Thursday", "Friday"], "workstationId": "8" },
-    { "name": "David Wilson", "preferredSmartDays": ["Monday", "Friday"] },
+    { "name": "David Wilson", "preferredSmartDays": ["Monday", "Friday"], "offsiteDays": ["Tuesday"] },
     { "name": "Jessica White", "preferredSmartDays": ["Tuesday", "Wednesday"] },
     { "name": "James Anderson", "preferredSmartDays": ["Monday", "Tuesday"] },
     { "name": "Emily Thompson", "preferredSmartDays": ["Wednesday", "Thursday"] },
@@ -20,5 +20,10 @@
     { "name": "Michael Lee", "preferredSmartDays": ["Thursday", "Friday"], "workstationId": "10" },
     { "name": "Emily Nelson", "preferredSmartDays": ["Thursday", "Friday"] },
     { "name": "William Scott", "preferredSmartDays": ["Thursday", "Friday"] }
-  ]
+  ],
+  "labels": {
+    "workstation": "Workstation",
+    "notAvailable": "not available",
+    "offsiteDay": "Offsite"
+  }
 }
