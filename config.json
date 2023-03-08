@@ -24,6 +24,7 @@
   "labels": {
     "workstation": "Workstation",
     "notAvailable": "not available",
-    "offsiteDay": "Offsite"
+    "offsiteDay": "Offsite",
+    "week": "Week"
   }
 }

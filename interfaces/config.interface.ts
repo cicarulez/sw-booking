@@ -10,5 +10,6 @@ export interface Config {
         notAvailable: string;
         workstation: string;
         offsiteDay: string;
+        week: string;
     }
 }
