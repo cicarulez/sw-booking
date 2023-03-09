@@ -22,14 +22,18 @@ export function createBooking(config: Config): SummaryBooking {
             if (a.workstationId && !b.workstationId) return -1;
             return 0;
         }).forEach(worker => {
-            if (!worker.preferredSmartDays || !worker.preferredSmartDays.length) {
+            if (!worker.preferredSmartDays || !worker.preferredSmartDays.length || worker.preferredSmartDays.length !== config.maxSmartDays) {
                 const preferredSmartDays: string[] = [];
                 let weekDays: string[] = [...config.weekDays];
-                for (let i = 0; i <= config.maxSmartDays; i++) {
+                if (worker.preferredSmartDays && worker.preferredSmartDays.length) {
+                    preferredSmartDays.push(...worker.preferredSmartDays);
+                }
+                do {
                     const weekday = weekDays[randomNum(0, weekDays.length - 1)];
                     preferredSmartDays.push(weekday);
-                    weekDays = [...weekDays.filter(id => id !== weekday)];
-                }
+                    weekDays = [...weekDays.filter(id => !preferredSmartDays.includes(id))];
+                } while (preferredSmartDays.length < config.maxSmartDays);
+
                 workers.push({
                     ...worker,
                     preferredSmartDays
