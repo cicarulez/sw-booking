@@ -15,10 +15,28 @@ export function createBooking(config: Config): SummaryBooking {
         bookingAvailableWs[`${config.labels.week}${week + 1}`] = {};
         bookingNotAvailableDay[`${config.labels.week}${week + 1}`] = {};
 
-        const workers = config.workers.sort((a, b) => {
+        const workers: Worker[] = [];
+
+        config.workers.sort((a, b) => {
             if (!a.workstationId && b.workstationId) return 1;
             if (a.workstationId && !b.workstationId) return -1;
             return 0;
+        }).forEach(worker => {
+            if (!worker.preferredSmartDays || !worker.preferredSmartDays.length) {
+                const preferredSmartDays: string[] = [];
+                let weekDays: string[] = [...config.weekDays];
+                for (let i = 0; i <= config.maxSmartDays; i++) {
+                    const weekday = weekDays[randomNum(0, weekDays.length - 1)];
+                    preferredSmartDays.push(weekday);
+                    weekDays = [...weekDays.filter(id => id !== weekday)];
+                }
+                workers.push({
+                    ...worker,
+                    preferredSmartDays
+                })
+            } else {
+                workers.push(worker);
+            }
         });
 
         for (const weekday of config.weekDays) {
@@ -76,7 +94,7 @@ export function createBooking(config: Config): SummaryBooking {
                     if (bookingAvailableWsKeys.length) {
                         const randomWeekDay = bookingAvailableWsKeys[randomNum(0, bookingAvailableWsKeys.length - 1)]
                         const randomBookingAvailableWs = bookingAvailableWs[`${config.labels.week}${week + 1}`][randomWeekDay];
-                        const unLockedWsWorker = getUnlockedWsWorker(config, randomBookingAvailableWs);
+                        const unLockedWsWorker = getUnlockedWsWorker(workers, randomBookingAvailableWs);
                         if (unLockedWsWorker) {
                             // Change preferred smart work day
                             console.log(`${config.labels.week}${week + 1} change ${notAvailableDay} of ${bookingNotAvailableDKey} with ${randomWeekDay} of ${unLockedWsWorker.name}`);
@@ -86,9 +104,9 @@ export function createBooking(config: Config): SummaryBooking {
                             bookingNotAvailableDay[`${config.labels.week}${week + 1}`][bookingNotAvailableDKey] = [...bookingNotAvailableDay[`${config.labels.week}${week + 1}`][bookingNotAvailableDKey]
                                 .filter(id => id !== notAvailableDay)];
                             bookingAvailableWs[`${config.labels.week}${week + 1}`][randomWeekDay] = [...bookingAvailableWs[`${config.labels.week}${week + 1}`][randomWeekDay]
-                                .filter( id => id !== unLockedWsWorker.workstationId)];
+                                .filter(id => id !== unLockedWsWorker.workstationId)];
                         } else {
-                            console.log('workstation\'s worker not available');
+                            console.log(`workstation's worker not available for ${bookingNotAvailableDKey}`);
                         }
                     } else {
                         console.log('workstation not available');
@@ -103,9 +121,9 @@ export function createBooking(config: Config): SummaryBooking {
     return {booking, bookingSw, bookingAvailableWs, bookingNotAvailableDay};
 }
 
-function getUnlockedWsWorker(config: Config, workstationIds: string[]): Worker {
+function getUnlockedWsWorker(workers: Worker[], workstationIds: string[]): Worker {
     const availableWorkers: Worker[] = [];
-    config.workers.forEach(w => {
+    workers.forEach(w => {
         if (!w.lockedSw && workstationIds.includes(w.workstationId)) {
             availableWorkers.push(w);
         }
